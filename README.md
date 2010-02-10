@@ -8,8 +8,6 @@ This extension is a fresh look at event delegation, taking into consideration li
 How to use
 ----------
 
-Simply specify the url to the asset you wish to preload.
-
     document.body.delegateEvent('click', {
 		'.link': function(e)
 		{
