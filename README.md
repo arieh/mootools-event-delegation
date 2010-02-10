@@ -26,7 +26,7 @@ Simply specify the url to the asset you wish to preload.
 		{
 			console.log('clicked submit element!');
 		}
-    }); 
+    });
 	
 This code illustrates how to add event delegates to mulitple elements with a single event. The second call to document.body.delegateEvent doesn't attach a new click event but simply adds the event delegates to the current list. The syntax is also a lot less ambiguous than the current :relay pseudo-selector.
 
