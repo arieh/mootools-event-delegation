@@ -20,16 +20,14 @@ Simply specify the url to the asset you wish to preload.
 			console.log('clicked image element!');
 		}
     });
-	
-You can also attach events to the preloader, so you always know what's happening.
 
-    preloader.addEvents({
-        'onSuccess': function(length)
-        {
-            console.log('asset loaded: ' + length + ' bytes.');
-        },
-        'onFailure': function()
-        {
-            console.log('asset not loaded.');
-        }
-    });
+    document.body.delegateEvent('click', {
+		'submit': function(e)
+		{
+			console.log('clicked submit element!');
+		}
+    }); 
+	
+This code illustrates how to add event delegates to mulitple elements with a single event. The second call to document.body.delegateEvent doesn't attach a new click event but simply adds the event delegates to the current list. The syntax is also a lot less ambiguous than the current :relay pseudo-selector.
+
+Please note, however, that due to current limitations in Element.match (MooTools 1.2.4) element decendency is not taken into account so you will need to be specific with id's/classes because 'ul#main > li a' is not properly handled with Element.match. This should be fixed in MooTools 2.
