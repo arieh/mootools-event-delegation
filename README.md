@@ -13,18 +13,18 @@ Simply specify the url to the asset you wish to preload.
     document.body.delegateEvent('click', {
 		'.link': function(e)
 		{
-			console.log('clicked .link element!');
+			console.log('clicked .link element');
 		},		
 		'img': function(e)
 		{
-			console.log('clicked image element!');
+			console.log('clicked image element');
 		}
     });
 
     document.body.delegateEvent('click', {
 		'submit': function(e)
 		{
-			console.log('clicked submit element!');
+			console.log('clicked submit element');
 		}
     });
 	
