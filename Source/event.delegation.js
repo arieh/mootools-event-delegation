@@ -16,7 +16,7 @@ provides: [Element.delegateEvent]
 ...
 */
 
-Element.implement({				  
+Element.implement({
 	'delegateEvent': function(type, delegates, prevent, propagate)
 	{	
 		//get stored delegates
@@ -58,5 +58,13 @@ Element.implement({
 				}
 			}
 		});		
-	}
+	},
+    
+    'delegateEvents': function(delegates, prevent, propagate)
+    {
+        for (key in delegates)
+        {
+            this.delegateEvent(key, delegates[key], prevent, propagate);
+        }
+    }
 });
