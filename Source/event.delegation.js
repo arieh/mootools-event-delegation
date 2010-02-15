@@ -31,7 +31,7 @@ Element.implement({
             Hash.each(delegates, function(fn, selector) {
                 if (stored[selector])
                 {
-                    Array.include(stored[selector], fn);
+                    stored[selector].push(fn);
                 }
                 else
                 {
@@ -81,6 +81,8 @@ Element.implement({
         {
             this.delegateEvent(key, delegates[key], prevent, propagate);
         }
+        
+        return this;
     },
     
     'denyEvent': function(type, selector, fn)
@@ -92,6 +94,8 @@ Element.implement({
         {
             stored[selector].erase(fn);
         }
+        
+        return this;
     },
     
     'denyEvents': function(type, selector)
@@ -101,7 +105,9 @@ Element.implement({
             
         if (stored && stored[selector])
         {
-            stored.erase(selector);
+            delete stored[selector];
         }
+        
+        return this;
     }
 });
