@@ -6,12 +6,13 @@ license: MIT-style
 
 authors:
 - Christopher Pitt
+- Arieh Glazer
 
 requires:
 - core/1.2.4: Element.Event
 - core/1.2.4: Selectors
 
-provides: [Element.delegateEvent]
+provides: [Element.delegateEvent, Element.delegateEvents, Element.denyEvent, Element.denyEvents]
 
 ...
 */
@@ -27,36 +28,50 @@ Element.implement({
 		// new delegates and return self.
 		if (stored)
 		{
-			var delegates = $extend(stored, delegates);
-			this.store(key, delegates);			
-			return this;
+            Hash.each(delegates, function(fn, selector) {
+                if (stored[selector])
+                {
+                    Array.include(stored[selector], fn);
+                }
+                else
+                {
+                    stored[selector] = [fn];
+                }
+            });
+            
+            return this;
 		}
 		else
 		{
-			this.store(key, delegates);
+            stored = new Hash();
+            Hash.each(delegates, function(fn, selector) {
+                stored[selector] = [fn];
+            });
+			this.store(key, stored);
 		}
 	
 		return this.addEvent(type, function(e)
-		{			
+		{
 			// Get target and set defaults
 			var target = document.id(e.target),
 				prevent = prevent || true,
 				propagate = propagate || false
-				delegates = this.retrieve(key); 
+				stored = this.retrieve(key),
+                args = arguments;
 	
 			// Cycle through rules
-			for (var selector in delegates)
-			{
-				if (target.match(selector))
-				{					
-					// If a rule matches then fiddle with the natural flow as required
+            Hash.each(stored, function(delegates, selector){
+				if (target.match(selector)){
 					if (prevent) e.preventDefault();
 					if (!propagate) e.stopPropagation();
-					
-					// Fire the method up...
-					if (delegates[selector].apply) return delegates[selector].apply(target, $A(arguments));
+ 
+					Array.each(delegates, function(fn) {
+						if (fn.apply) fn.apply(target, args);
+					});
 				}
-			}
+			});
+            
+            return this;
 		});		
 	},
     
@@ -65,6 +80,28 @@ Element.implement({
         for (key in delegates)
         {
             this.delegateEvent(key, delegates[key], prevent, propagate);
+        }
+    },
+    
+    'denyEvent': function(type, selector, fn)
+    {
+        var key = type + '-delegates',
+            stored = this.retrieve(key) || false;
+            
+        if (stored && stored[selector])
+        {
+            stored[selector].erase(fn);
+        }
+    },
+    
+    'denyEvents': function(type, selector)
+    {
+        var key = type + '-delegates',
+            stored = this.retrieve(key) || false;
+            
+        if (stored && stored[selector])
+        {
+            stored.erase(selector);
         }
     }
 });
