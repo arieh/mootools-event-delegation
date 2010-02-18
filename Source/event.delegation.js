@@ -111,3 +111,6 @@ Element.implement({
         return this;
     }
 });
+
+Element.alias('delegateEvent','relayEvent');
+Element.alias('delegateEvents','relayEvents');
