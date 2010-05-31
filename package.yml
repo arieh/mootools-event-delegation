@@ -1,5 +1,6 @@
 name: Better Event Delegation
 author: sixtyseconds
 category: Native
-tags: [element, delegation, addEvent, event, selector, events]
+tags: [element, delegation, addEvent, event, selector, events, denyEvent, delegateEvent, denyEvents, delegateEvents]
+demo: http://www.jsfiddle.net/sixtyseconds/7M4LV/
 current: 0.4
