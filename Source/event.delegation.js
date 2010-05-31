@@ -116,7 +116,7 @@ requires:
 			var stored = this.retrieve('delegates:' + type) || false;
 			stored && stored[selector] && delete stored[selector];
 			return this;
-	    }
+		}
 	});
 
 	Element.alias('delegateEvent','relayEvent');
