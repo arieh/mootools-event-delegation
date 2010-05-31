@@ -130,9 +130,4 @@ requires:
 		}
 	});
 
-	Element.alias({
-		'delegateEvent','relayEvent',
-		'delegateEvents','relayEvents'
-	});
-
 })(window ? window : this);
