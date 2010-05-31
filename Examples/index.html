@@ -1,0 +1,66 @@
+<!doctype html>
+<html>
+	<head>
+		<title>Better Event Delegation<title>
+		<style type="text/css">
+			body
+			{
+				padding: 25px;
+				font-family: arial, tahoma, verdana;
+				font-size: 11px;
+			}
+			h1
+			{
+				margin: 0px;
+				padding: 0px;
+				font-size: 14px;
+				font-weight: normal;
+			}
+		</style>
+	</head>
+	<body>
+		<h1>Better Event Delegation</h1>
+		<div id="container">
+			<p><a href='#' class="clickable">I am clickable</a></p>
+			<p><input type="text" class="focusable" /></p>
+			<p><a href='#' class="remove">Remove my event delegation</a></p>
+		</div>
+		<!--<script type="text/javascript" src="mootools.1.3.beta.1.js"></script> -> there seems to be a regression that I can't explain-->
+		<script type="text/javascript" src="mootools.1.2.4.js"></script>
+		<script type="text/javascript" src="../Source/event.delegation.js"></script>
+		<script type="text/javascript">
+			window.addEvent('domready', function() {
+				document.id('container').delegateEvents({
+					'click':
+					{
+						'a.clickable': function(e)
+						{
+							e.stop();
+							alert('Told you so!');
+						},
+						'a.remove': function(e)
+						{
+							e.stop();
+							document.id('container').denyEvents('click', 'a.remove');
+							alert('My event delegation has been removed!');
+						}
+					},
+					'focus':
+					{
+						'input.focusable': function(e)
+						{
+							this.set('value', 'I have focus!');
+						}
+					},
+					'blur':
+					{
+						'input.focusable': function(e)
+						{
+							this.set('value', 'I lost focus! ;(');
+						}
+					}
+				});
+			});
+		</script>
+	</body>
+</html>
