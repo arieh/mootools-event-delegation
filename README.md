@@ -38,6 +38,13 @@ How to use
 			{
 				this.set('value', 'I lost focus! ;(');
 			}
+		},
+		'change':
+		{
+			'select.changeable': function(e)
+			{
+				alert('I have changed!');
+			}
 		}
 	});
 
