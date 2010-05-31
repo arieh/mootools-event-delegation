@@ -130,7 +130,7 @@ requires:
 		}
 	});
 
-	Element.alias('delegateEvent','relayEvent');
-	Element.alias('delegateEvents','relayEvents');
+	//Element.alias('delegateEvent','relayEvent');
+	//Element.alias('delegateEvents','relayEvents');
 
 })(window ? window : this);
