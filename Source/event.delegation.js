@@ -71,7 +71,7 @@ requires:
 			}
 
 			// if event type is focus/blur then shim for delegation.
-			if (/focus|blur/.test(type))
+			if (/focus|blur|change/.test(type))
 			{
 				var wrapper = function(e)
 					{
@@ -82,7 +82,18 @@ requires:
 				if (Browser.Engine.trident)
 				{
 					// aliased events for (smell)ie...
-					self.attachEvent(type == 'focus' ? 'onfocusin' : 'onfocusout', wrapper);
+					switch (type)
+					{
+						case 'focus':
+							self.attachEvent('onfocusin', wrapper);
+							break;
+						case 'blur':
+							self.attachEvent('onfocusout', wrapper);
+							break;
+						case 'change':
+							self.attachEvent('change', wrapper);
+							break;
+					}
 				}
 				else
 				{
