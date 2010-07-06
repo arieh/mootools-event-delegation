@@ -1,9 +1,9 @@
-Better Event Delegation
-=======================
+sixtyseconds event delegation
+=============================
 
 This extension is a fresh look at event delegation, taking into consideration limitations of the current MooTools event delegation approach.
 
-![Screenshot](http://github.com/sixtyseconds/EventDelegation/raw/master/screen.png)
+![Screenshot](http://github.com/sixtyseconds/mootools-event-delegation/raw/master/screen.png)
 
 How to use
 ----------
