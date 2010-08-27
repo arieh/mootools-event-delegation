@@ -2,8 +2,10 @@
 ---
 description: Better event delegation for MooTools.
 license: MIT-style
-authors: [Christopher Pitt, Arieh Glazer, James Emerton]
-provides: [Element.delegateEvent, Element.delegateEvents, Element.denyEvent, Element.denyEvents]
+authors:
+  [Christopher Pitt, Arieh Glazer, James Emerton]
+provides:
+  [Element.delegateEvent, Element.delegateEvents, Element.denyEvent, Element.denyEvents]
 requires: 
   core/1.2.4: [Element.Event, Selectors]
 ...
@@ -130,4 +132,4 @@ requires:
 		}
 	});
 
-})(window ? window : this);
+})(window);

@@ -1,69 +1,63 @@
 <!doctype html>
 <html>
 	<head>
-		<title>sixtyseconds event delegation<title>
-		<style type="text/css">
-			body
-			{
-				padding: 25px;
-				font-family: arial, tahoma, verdana;
-				font-size: 11px;
-			}
-			h1
-			{
-				margin: 0px;
-				padding: 0px;
-				font-size: 14px;
-				font-weight: normal;
-			}
-		</style>
+		<title>sixtyseconds event delegation</title>
+		<link type="text/css" rel="stylesheet" href="http://github.com/sixtyseconds/mootools-plugin-template/raw/master/css/default.css" /> 
+		<link type="text/css" rel="stylesheet" href="http://github.com/sixtyseconds/mootools-picker/raw/master/Source/sixtyseconds.picker.css" />
+		<link id="theme" type="text/css" href="../Source/css/headline.css" rel="stylesheet" />
 	</head>
 	<body>
 		<h1>sixtyseconds event delegation</h1>
-		<div id="container">
-			<p><a href='#' class="clickable">I am clickable</a></p>
-			<p><input type="text" class="focusable" /></p>
-			<p><a href='#' class="remove">Remove my event delegation</a></p>
-			<p><select class="changeable"><option value="1">option 1</option><option value="2">option 2</option></select></p>
-		</div>
-		<script type="text/javascript" src="mootools.1.2.4.js"></script>
+		<p><a href='#' class="clickable">click me</a></p>
+		<p><input type="text" class="focusable" /></p>
+		<p><a href='#' class="remove">click me to remove my click delegation</a></p>
+		<p>
+			<select class="changeable">
+				<option value="1">option 1</option>
+				<option value="2">option 2</option>
+				<option value="3">option 3</option>
+			</select>
+		</p>
+		<script type="text/javascript" src="http://github.com/sixtyseconds/mootools-plugin-template/raw/master/js/mootools.core.1.2.4.js"></script> 
+		<script type="text/javascript" src="http://github.com/sixtyseconds/mootools-plugin-template/raw/master/js/log.js"></script> 
+		<script type="text/javascript" src="http://github.com/sixtyseconds/mootools-plugin-template/raw/master/js/branding.js"></script> 
 		<script type="text/javascript" src="../Source/sixtyseconds.event.delegation.js"></script>
 		<script type="text/javascript">
 			window.addEvent('domready', function() {
-				document.id('container').delegateEvents({
+				document.id(document.body).delegateEvents({
 					'click':
 					{
 						'a.clickable': function(e)
 						{
 							e.stop();
-							alert('Told you so!');
+							log('a.clickable clicked');
 						},
 						'a.remove': function(e)
 						{
 							e.stop();
-							document.id('container').denyEvents('click', 'a.remove');
-							alert('My event delegation has been removed!');
+							document.id(document.body).denyEvents('click', 'a.remove');
+							log('a.remove clicked. it now has no click event');
 						}
 					},
 					'focus':
 					{
 						'input.focusable': function(e)
 						{
-							this.set('value', 'I have focus!');
+							log('a.focusable focused');
 						}
 					},
 					'blur':
 					{
 						'input.focusable': function(e)
 						{
-							this.set('value', 'I lost focus! ;(');
+							log('a.focusable blurred');
 						}
 					},
 					'change':
 					{
 						'select.changeable': function(e)
 						{
-							alert('I have changed!');
+							log('select.changeable changed');
 						}
 					}
 				});
