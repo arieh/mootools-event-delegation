@@ -5,20 +5,17 @@ license: MIT-style
 authors:
   [Christopher Pitt, Arieh Glazer, James Emerton]
 provides:
-  [Element.delegateEvent, Element.delegateEvents, Element.denyEvent, Element.denyEvents]
-requires: 
+  [Element.toSelector, Element.delegateEvent, Element.delegateEvents, Element.denyEvent, Element.denyEvents, Element.hoistEvent, Element.hoistEvents, Element.dropEvent, Element.dropEvents]
+requires:
   core/1.2.4: [Element.Event, Selectors]
 ...
 */
 
-(function(context) {
+(function() {
 
-	var each = function(collection, fn, context)
-	{
-		for (var key in collection)
-		{
-			if (collection.hasOwnProperty(key))
-			{
+	var each = function(collection, fn, context) {
+		for (var key in collection) {
+			if (collection.hasOwnProperty(key)) {
 				fn.apply((context || this), [key, collection[key]]);
 			}
 		}
@@ -26,25 +23,38 @@ requires:
 	};
 
 	Element.implement({
-		'delegateEvent': function(type, delegates, prevent, propagate)
-		{
-			//get stored delegates
+		'toSelector': function() {
+			var selector = [],
+				_id = this.get('id'),
+				_name = this.get('name'),
+				_class = this.get('class');
+
+			if (_id) {
+				selector.push('#', _id);
+			}
+			if (_name) {
+				selector.push('[name=', _name, ']');
+			}
+			if (_class) {
+				selector.push('.', _class.replace(' ', '.'));
+			}
+
+			return selector.join('');
+		},
+
+		'delegateEvent': function(type, delegates, prevent, propagate) {
 			var self = this,
 				key = 'delegates:' + type,
 				stored = this.retrieve(key) || false,
-				handler = function(e)
-				{
-					// Get target and set defaults
+				handler = function(e) {
 					var target = document.id(e.target),
 						prevent = prevent || true,
 						propagate = propagate || false
 						stored = self.retrieve(key),
 						args = arguments;
 
-					// Cycle through rules
 					each(stored, function(selector, delegates) {
-						if (target.match(selector))
-						{
+						if (target.match(selector)) {
 							if (prevent) e.preventDefault();
 							if (!propagate) e.stopPropagation();
 							each(delegates, function(key, fn) {
@@ -55,16 +65,12 @@ requires:
 					return self;
 				};
 
-			// if stored delegates; extend with new delegates and return self.
-			if (stored)
-			{
+			if (stored) {
 				each(delegates, function(selector, fn) {
 					(stored[selector]) ? stored[selector].push(fn) : stored[selector] = [fn];
 				});
 				return self;
-			}
-			else
-			{
+			} else {
 				stored = {};
 				each(delegates, function(selector, fn) {
 					stored[selector] = [fn];
@@ -72,20 +78,14 @@ requires:
 				self.store(key, stored);
 			}
 
-			// if event type is focus/blur then shim for delegation.
-			if (/focus|blur|change/.test(type))
-			{
-				var wrapper = function(e)
-					{
-						e = new Event(e, self.getWindow());
-						handler.call(self, e);
-					};
+			if (/focus|blur|change/.test(type)) {
+				var wrapper = function(e) {
+					e = new Event(e, self.getWindow());
+					handler.call(self, e);
+				};
 
-				if (Browser.Engine.trident)
-				{
-					// aliased events for (smell)ie...
-					switch (type)
-					{
+				if (Browser.Engine.trident) {
+					switch (type) {
 						case 'focus':
 							self.attachEvent('onfocusin', wrapper);
 							break;
@@ -96,40 +96,56 @@ requires:
 							self.attachEvent('change', wrapper);
 							break;
 					}
-				}
-				else
-				{
+				} else {
 					self.addEventListener(type, wrapper, true);
 				}
-			}
-			else
-			{
+			} else {
 				self.addEvent(type, handler);
 			}
 			return self;
 		},
 
-		'delegateEvents': function(delegates, prevent, propagate)
-		{
+		'delegateEvents': function(delegates, prevent, propagate) {
 			each(delegates, function(key, delegate) {
 				this.delegateEvent(key, delegate, prevent, propagate);
 			}, this);
 			return this;
 		},
 
-		'denyEvent': function(type, selector, fn)
-		{
+		'denyEvent': function(type, selector, fn) {
 			var stored = this.retrieve('delegates:' + type) || false;
 			stored && stored[selector] && stored[selector].erase(fn);
 			return this;
 		},
 
-		'denyEvents': function(type, selector)
-		{
+		'denyEvents': function(type, selector) {
 			var stored = this.retrieve('delegates:' + type) || false;
 			stored && stored[selector] && delete stored[selector];
 			return this;
+		},
+
+		'hoistEvent': function(parent, type, fn, prevent, propogate) {
+			var delegates = {};
+			delegates[this.toSelector()] = fn;
+			return parent.delegateEvent.apply(parent, [type, delegates, prevent, propogate]);
+		},
+
+		'hoistEvents': function(parent, types, prevent, propogate) {
+			var delegates = {}, selector = this.toSelector();
+			each(types, function(key, delegate) {
+				delegates[key] = {};
+				delegates[key][selector] = delegate;
+			}, this);
+			return parent.delegateEvents.apply(parent, [delegates, prevent, propogate]);
+		},
+
+		'dropEvent': function(parent, type, fn) {
+			return parent.denyEvent(this.toSelector(), type, fn);
+		},
+
+		'dropEvents': function(parent, type) {
+			return parent.denyEvents(type, this.toSelector());
 		}
 	});
 
-})(window);
+})();
