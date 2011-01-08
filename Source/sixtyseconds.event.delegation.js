@@ -53,7 +53,7 @@ requires:
 						stored = self.retrieve(key),
 						args = arguments,
 
-						inclusive = (target == self || target.getParent().contains(self));
+						inclusive = (target == self || target.getParents().contains(self));
 
 					each(stored, function(selector, delegates) {
 						if ((selector == 'self' && inclusive) || target.match(selector)) {
