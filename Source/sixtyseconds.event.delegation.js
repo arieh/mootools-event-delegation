@@ -7,7 +7,7 @@ authors:
 provides:
   [Element.toSelector, Element.delegateEvent, Element.delegateEvents, Element.denyEvent, Element.denyEvents, Element.hoistEvent, Element.hoistEvents, Element.dropEvent, Element.dropEvents]
 requires:
-  core/1.2.4: [Element.Event, Selectors]
+  core/1.3: [Element.Event, Selectors]
 ...
 */
 
@@ -41,27 +41,32 @@ requires:
 
 			return selector.join('');
 		},
-
 		'delegateEvent': function(type, delegates, prevent, propagate) {
 			var self = this,
 				key = 'delegates:' + type,
 				stored = this.retrieve(key) || false,
+
 				handler = function(e) {
 					var target = document.id(e.target),
 						prevent = prevent || true,
 						propagate = propagate || false
 						stored = self.retrieve(key),
-						args = arguments;
+						args = arguments,
+
+						inclusive = (target == self || target.getParent().contains(self));
 
 					each(stored, function(selector, delegates) {
-						if (target.match(selector)) {
-							if (prevent) e.preventDefault();
-							if (!propagate) e.stopPropagation();
+						if ((selector == 'self' && inclusive) || target.match(selector)) {
+							if (selector != 'self') {
+								if (prevent) e.preventDefault();
+								if (!propagate) e.stopPropagation();
+							}
 							each(delegates, function(key, fn) {
 								fn.apply && fn.apply(target, args);
 							});
 						}
 					}, self);
+
 					return self;
 				};
 
@@ -104,45 +109,41 @@ requires:
 			}
 			return self;
 		},
-
 		'delegateEvents': function(delegates, prevent, propagate) {
 			each(delegates, function(key, delegate) {
 				this.delegateEvent(key, delegate, prevent, propagate);
 			}, this);
 			return this;
 		},
-
 		'denyEvent': function(type, selector, fn) {
 			var stored = this.retrieve('delegates:' + type) || false;
 			stored && stored[selector] && stored[selector].erase(fn);
 			return this;
 		},
-
 		'denyEvents': function(type, selector) {
 			var stored = this.retrieve('delegates:' + type) || false;
 			stored && stored[selector] && delete stored[selector];
 			return this;
 		},
-
 		'hoistEvent': function(parent, type, fn, prevent, propogate) {
 			var delegates = {};
 			delegates[this.toSelector()] = fn;
 			return parent.delegateEvent.apply(parent, [type, delegates, prevent, propogate]);
 		},
-
 		'hoistEvents': function(parent, types, prevent, propogate) {
-			var delegates = {}, selector = this.toSelector();
+			var delegates = {},
+				selector = this.toSelector();
+
 			each(types, function(key, delegate) {
 				delegates[key] = {};
 				delegates[key][selector] = delegate;
 			}, this);
+
 			return parent.delegateEvents.apply(parent, [delegates, prevent, propogate]);
 		},
-
 		'dropEvent': function(parent, type, fn) {
 			return parent.denyEvent(this.toSelector(), type, fn);
 		},
-
 		'dropEvents': function(parent, type) {
 			return parent.denyEvents(type, this.toSelector());
 		}

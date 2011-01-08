@@ -6,14 +6,7 @@
 	</head>
 	<body>
 		<h1>sixtyseconds event delegation</h1>
-		<div class="donations">
-			Donations: 
-			<a href="http://pledgie.com/campaigns/11798">Pledgie</a>
-		</div>
-		<div class="source">
-			Source:
-			<a href="http://www.github.com/sixtyseconds/mootools-event-delegation/">GitHub</a>
-		</div>
+		<a href="https://www.github.com/sixtyseconds/mootools-event-delegation/">Source Code</a>
 		<p><a href='#' class="clickable">click me</a></p>
 		<p><input type="text" class="focusable" /></p>
 		<p><a href='#' class="remove">click me to remove my click delegation</a></p>
@@ -31,42 +24,36 @@
 		<script type="text/javascript">
 			window.addEvent('domready', function() {
 				document.id(document.body).delegateEvents({
-					'click':
-					{
-						'a.clickable': function(e)
-						{
+					'click': {
+						'a.clickable': function(e) {
 							e.stop();
 							log('a.clickable clicked');
 						},
-						'a.remove': function(e)
-						{
+						'a.remove': function(e) {
 							e.stop();
 							document.id(document.body).denyEvents('click', 'a.remove');
 							log('a.remove clicked. it now has no click event');
+						},
+						'self': function(e) {
+							log('delegate fired on self (document.body).');
 						}
 					},
-					'focus':
-					{
-						'input.focusable': function(e)
-						{
+					'focus': {
+						'input.focusable': function(e) {
 							log('a.focusable focused');
 						}
 					},
-					'blur':
-					{
-						'input.focusable': function(e)
-						{
+					'blur': {
+						'input.focusable': function(e) {
 							log('a.focusable blurred');
 						}
 					},
-					'change':
-					{
-						'select.changeable': function(e)
-						{
+					'change': {
+						'select.changeable': function(e) {
 							log('select.changeable changed');
 						}
 					}
-				});
+				}, false, true);
 			});
 		</script>
 	</body>
