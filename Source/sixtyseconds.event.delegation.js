@@ -62,7 +62,7 @@ requires:
 								if (!propagate) e.stopPropagation();
 							}
 							each(delegates, function(key, fn) {
-								fn.apply && fn.apply(target, args);
+								fn.apply(target, args);
 							});
 						}
 					}, self);
@@ -89,7 +89,7 @@ requires:
 					handler.call(self, e);
 				};
 
-				if (Browser.Engine.trident) {
+				if (Browser.ie) {
 					switch (type) {
 						case 'focus':
 							self.attachEvent('onfocusin', wrapper);

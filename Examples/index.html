@@ -17,7 +17,7 @@
 				<option value="3">option 3</option>
 			</select>
 		</p>
-		<script type="text/javascript" src="http://github.com/sixtyseconds/mootools-plugin-template/raw/master/js/mootools.core.1.2.4.js"></script> 
+		<script type="text/javascript" src="http://github.com/sixtyseconds/mootools-plugin-template/raw/master/js/mootools.core.1.3.js"></script> 
 		<script type="text/javascript" src="http://github.com/sixtyseconds/mootools-plugin-template/raw/master/js/log.js"></script> 
 		<script type="text/javascript" src="http://github.com/sixtyseconds/mootools-plugin-template/raw/master/js/branding.js"></script> 
 		<script type="text/javascript" src="../Source/sixtyseconds.event.delegation.js"></script>
@@ -25,35 +25,33 @@
 			window.addEvent('domready', function() {
 				document.id(document.body).delegateEvents({
 					'click': {
-						'a.clickable': function(e) {
-							e.stop();
+						'a.clickable': function() {
 							log('a.clickable clicked');
 						},
-						'a.remove': function(e) {
-							e.stop();
+						'a.remove': function() {
 							document.id(document.body).denyEvents('click', 'a.remove');
 							log('a.remove clicked. it now has no click event');
 						},
-						'self': function(e) {
-							log('delegate fired on self (document.body).');
+						'self': function() {
+							log('self (document.body) clicked.');
 						}
 					},
 					'focus': {
-						'input.focusable': function(e) {
-							log('a.focusable focused');
+						'input.focusable': function() {
+							log('input.focusable focused');
 						}
 					},
 					'blur': {
-						'input.focusable': function(e) {
-							log('a.focusable blurred');
+						'input.focusable': function() {
+							log('input.focusable blurred');
 						}
 					},
 					'change': {
-						'select.changeable': function(e) {
+						'select.changeable': function() {
 							log('select.changeable changed');
 						}
 					}
-				}, false, true);
+				});
 			});
 		</script>
 	</body>
