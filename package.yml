@@ -2,4 +2,4 @@ name: sixtyseconds event delegation
 author: sixtyseconds
 category: Native
 tags: [element, delegation, addEvent, event, selector, events, denyEvent, delegateEvent, denyEvents, delegateEvents]
-current: 0.6
+current: 0.7
