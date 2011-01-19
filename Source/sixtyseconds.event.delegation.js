@@ -51,12 +51,10 @@ requires:
 						prevent = prevent || true,
 						propagate = propagate || false
 						stored = self.retrieve(key),
-						args = arguments,
-
-						inclusive = (target == self || target.getParents().contains(self));
+						args = arguments;
 
 					each(stored, function(selector, delegates) {
-						if ((selector == 'self' && inclusive) || target.match(selector)) {
+						if ((selector == 'self' && (target == self || target.getParents().contains(self))) || target.match(selector)) {
 							if (selector != 'self') {
 								if (prevent) e.preventDefault();
 								if (!propagate) e.stopPropagation();
