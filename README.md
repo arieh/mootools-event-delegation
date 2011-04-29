@@ -1,47 +1,6 @@
-sixtyseconds event delegation
-=============================
+Mootools Event Delegation
+=========================
 
-This extension is a fresh look at event delegation, taking into consideration limitations of the current MooTools event delegation approach.
+This library adds a different take on Mootools event delegation.
 
-![Screenshot](https://github.com/sixtyseconds/mootools-event-delegation/raw/master/screen.png)
-
-How to use
-----------
-
-	// A working demo has been included in the download
-	
-	document.id('container').delegateEvents({
-		'click': {
-			'a.clickable': function(e) {
-				e.stop();
-				alert('Told you so!');
-			},
-			'a.remove': function(e) {
-				e.stop();
-				document.id('container').denyEvents('click', 'a.remove');
-				alert('My event delegation has been removed!');
-			}
-		},
-		'focus': {
-			'input.focusable': function(e) {
-				this.set('value', 'I have focus!');
-			}
-		},
-		'blur': {
-			'input.focusable': function(e) {
-				this.set('value', 'I lost focus! ;(');
-			}
-		},
-		'change': {
-			'select.changeable': function(e) {
-				alert('I have changed!');
-			}
-		}
-	});
-	
-	document.id('child').hoiseEvent(document.id('container'), 'click', function(e) {
-		e.stop();
-		alert('I happened with reverse-event-delegation (hoisting if you like)'.);
-	});
-
-This code illustrates how to add event delegates to multiple elements with a single event. The second call to document.body.delegateEvent doesn't attach a new click event but simply adds the event delegates to the current list. You can also use delegateEvents() to setup delegates for multiple event types at the same time. The syntax is also a lot less ambiguous than the current :relay pseudo-selector.
+[Examples are provided](http://jsfiddle.net/gh/get/mootools/1.3/sixtyseconds/mootools-event-delegation/tree/master/examples/)

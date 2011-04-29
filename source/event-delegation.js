@@ -1,16 +1,3 @@
-/*
----
-description: Better event delegation for MooTools.
-license: MIT-style
-authors:
-  [Christopher Pitt, Arieh Glazer, James Emerton]
-provides:
-  [Element.toSelector, Element.delegateEvent, Element.delegateEvents, Element.denyEvent, Element.denyEvents, Element.hoistEvent, Element.hoistEvents, Element.dropEvent, Element.dropEvents]
-requires:
-  core/1.3: [Element.Event, Selectors]
-...
-*/
-
 (function() {
 
 	var each = function(collection, fn, context) {
@@ -49,7 +36,7 @@ requires:
 				handler = function(e) {
 					var target = document.id(e.target),
 						prevent = prevent || true,
-						propagate = propagate || false
+						propagate = propagate || false,
 						stored = self.retrieve(key),
 						args = arguments;
 
