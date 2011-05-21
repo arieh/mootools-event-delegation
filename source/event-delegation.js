@@ -3,7 +3,7 @@
 	var each = function(collection, fn, context) {
 		for (var key in collection) {
 			if (collection.hasOwnProperty(key)) {
-				fn.apply((context || this), [key, collection[key]]);
+				fn.delay(0,(context || this), [key, collection[key]]);
 			}
 		}
 		return collection;
